@@ -19,22 +19,8 @@ const IMAGE_SETS = {
         "images/practice03.jpg"
     ],
 
+    // Version B：Session 1でB画像、Session 2でA画像を表示
     session1: [
-        "images/A01.jpg",
-        "images/A02.jpg",
-        "images/A03.jpg",
-        "images/A04.jpg",
-        "images/A05.jpg",
-        "images/A06.jpg",
-        "images/A07.jpg",
-        "images/A08.jpg",
-        "images/A09.jpg",
-        "images/A10.jpg",
-        "images/A11.jpg",
-        "images/A12.jpg"
-    ],
-
-    session2: [
         "images/B01.jpg",
         "images/B02.jpg",
         "images/B03.jpg",
@@ -47,6 +33,21 @@ const IMAGE_SETS = {
         "images/B10.jpg",
         "images/B11.jpg",
         "images/B12.jpg"
+    ],
+
+    session2: [
+        "images/A01.jpg",
+        "images/A02.jpg",
+        "images/A03.jpg",
+        "images/A04.jpg",
+        "images/A05.jpg",
+        "images/A06.jpg",
+        "images/A07.jpg",
+        "images/A08.jpg",
+        "images/A09.jpg",
+        "images/A10.jpg",
+        "images/A11.jpg",
+        "images/A12.jpg"
     ]
 };
 
@@ -60,10 +61,12 @@ const EXPERIMENT = {
 
     SWIPE_DISTANCE: 70,
 
+    // Version B：画像セットの割り当てを逆にすることで、
+    // A・Bそれぞれが上方向と下方向の両方に割り当てられます。
     SWIPE_DIRECTION: {
-        practice: "down",
-        session1: "down",
-        session2: "up"
+        practice: "up",
+        session1: "up",
+        session2: "down"
     }
 };
 
