@@ -19,7 +19,14 @@ const IMAGE_SETS = {
         "images/practice03.jpg"
     ],
 
-    // Version B：Session 1でB画像、Session 2でA画像を表示
+    // Session 2前の練習でも同じ練習画像を使用
+    practice2: [
+        "images/practice01.jpg",
+        "images/practice02.jpg",
+        "images/practice03.jpg"
+    ],
+
+    // Version B：Session 1はB画像
     session1: [
         "images/B01.jpg",
         "images/B02.jpg",
@@ -35,6 +42,7 @@ const IMAGE_SETS = {
         "images/B12.jpg"
     ],
 
+    // Version B：Session 2はA画像
     session2: [
         "images/A01.jpg",
         "images/A02.jpg",
@@ -61,12 +69,11 @@ const EXPERIMENT = {
 
     SWIPE_DISTANCE: 70,
 
-    // Version B：画像セットの割り当てを逆にすることで、
-    // A・Bそれぞれが上方向と下方向の両方に割り当てられます。
     SWIPE_DIRECTION: {
-        practice: "up",
-        session1: "up",
-        session2: "down"
+        practice: "down",
+        practice2: "up",
+        session1: "down",
+        session2: "up"
     }
 };
 
@@ -218,10 +225,10 @@ function showCurrentImage() {
 
     remainingTime = EXPERIMENT.LIMIT_TIME;
 
-imageCard.classList.add("loading");
+    imageCard.classList.add("loading");
 
-resetCardAnimation();
-resetAnswerButtons();
+    resetCardAnimation();
+    resetAnswerButtons();
 
     const images = IMAGE_SETS[currentMode];
     const imagePath = images[currentIndex];
@@ -229,25 +236,24 @@ resetAnswerButtons();
     sessionName.textContent = getSessionName();
     progress.textContent = `${currentIndex + 1} / ${images.length}`;
 
-iceImage.alt = `${getSessionName()}の画像${currentIndex + 1}`;
+    iceImage.alt = `${getSessionName()}の画像${currentIndex + 1}`;
 
-iceImage.onload = () => {
-    imageCard.classList.remove("loading");
+    iceImage.onload = () => {
+        imageCard.classList.remove("loading");
 
-    likeButton.disabled = false;
-    dislikeButton.disabled = false;
+        likeButton.disabled = false;
+        dislikeButton.disabled = false;
 
-    startTimer();
-};
+        startTimer();
+    };
 
-iceImage.src = imagePath;
+    iceImage.src = imagePath;
 
     updateGuideBeforeAnswer();
     updateTimerDisplay();
 
     likeButton.disabled = false;
     dislikeButton.disabled = false;
-
 }
 
 
@@ -259,6 +265,9 @@ function getSessionName() {
     switch (currentMode) {
         case "practice":
             return "練習";
+
+        case "practice2":
+            return "Session 2前の練習";
 
         case "session1":
             return "Session 1";
@@ -675,6 +684,11 @@ function finishCurrentMode() {
         return;
     }
 
+    if (currentMode === "practice2") {
+        showPractice2Complete();
+        return;
+    }
+
     if (currentMode === "session1") {
         showBreakScreen();
         return;
@@ -687,15 +701,16 @@ function finishCurrentMode() {
 
 
 /* ===================================
-   練習終了画面
+   最初の練習終了画面
 =================================== */
 
 function showPracticeComplete() {
     messageTitle.textContent = "練習終了";
+
     messageBody.innerHTML =
-        "これから本番を開始します。<br>" +
+        "これから本番を開始します<br>" +
         "Session 1では、評価後に<br>" +
-        "下から上へスワイプしてください。";
+        "上から下へスワイプしてください";
 
     nextButton.textContent = "Session 1を始める";
 
@@ -708,16 +723,16 @@ function showPracticeComplete() {
 
 
 /* ===================================
-   休憩画面
+   Session 2前の練習終了画面
 =================================== */
 
-function showBreakScreen() {
-    messageTitle.textContent = "休憩";
+function showPractice2Complete() {
+    messageTitle.textContent = "練習終了";
+
     messageBody.innerHTML =
-        "Session 1は終了です。<br><br>" +
-        "準備ができたらSession 2を始めてください。<br>" +
+        "これから本番を開始します<br>" +
         "Session 2では、評価後に<br>" +
-        "上から下へスワイプしてください。";
+        "下から上へスワイプしてください";
 
     nextButton.textContent = "Session 2を始める";
 
@@ -730,13 +745,37 @@ function showBreakScreen() {
 
 
 /* ===================================
+   Session 1終了・休憩画面
+=================================== */
+
+function showBreakScreen() {
+    messageTitle.textContent = "休憩";
+
+    messageBody.innerHTML =
+        "準備ができたら<br>" +
+        "Session 2を始めてください<br><br>" +
+        "評価後は下から上へ<br>" +
+        "スワイプしてください";
+
+    nextButton.textContent = "練習を始める";
+
+    nextAction = () => {
+        startMode("practice2");
+    };
+
+    showScreen("message");
+}
+
+
+/* ===================================
    画像読み込みエラー
 =================================== */
 
 iceImage.addEventListener("error", () => {
     guide.style.color = "#E74C3C";
+
     guide.textContent =
-        "画像を読み込めません。ファイル名を確認してください。";
+        "画像を読み込めません ファイル名を確認してください";
 });
 
 
